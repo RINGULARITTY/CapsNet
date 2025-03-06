@@ -1,6 +1,8 @@
 ## CapsNet image classification
 
-Pytorch Cuda required.
+### Requirements:
+1. Dataset with train, valid, test folders and use folder to specify the target class.
+2. Python venv with Pytorch Cuda.
 
 ### Split into 2 sections (jupyter files):
 1. Train part including fine tuning using optuna.

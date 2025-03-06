@@ -4,7 +4,6 @@ import random
 from torch.utils.data import Dataset
 from tqdm import tqdm
 import numpy as np
-import kagglehub
 import os
 from torchvision import datasets
 from torch.utils.data import DataLoader
@@ -40,15 +39,10 @@ class CachedDatasetMulti(Dataset):
     def __len__(self):
         return len(self.cached_data)
 
-def load_raw_datasets():
-    path = os.path.join(
-        kagglehub.dataset_download("fantacher/neu-metal-surface-defects-data"),
-        "NEU Metal Surface Defects Data"
-    )
-
-    train_dataset_raw = datasets.ImageFolder(root=f"{path}/train", transform=None)
-    val_dataset_raw   = datasets.ImageFolder(root=f"{path}/valid", transform=None)
-    test_dataset_raw  = datasets.ImageFolder(root=f"{path}/test", transform=None)
+def load_raw_datasets(dataset_name):
+    train_dataset_raw = datasets.ImageFolder(root=f"datasets/{dataset_name}/train", transform=None)
+    val_dataset_raw   = datasets.ImageFolder(root=f"datasets/{dataset_name}/valid", transform=None)
+    test_dataset_raw  = datasets.ImageFolder(root=f"datasets/{dataset_name}/test", transform=None)
     
     return train_dataset_raw, val_dataset_raw, test_dataset_raw
     
@@ -102,13 +96,8 @@ def load_trainset_with_resize(img_size, train_dataset_raw, val_dataset_raw):
     
     return train_loader, val_loader
 
-def load_test_dataset(img_size):
-    path = os.path.join(
-        kagglehub.dataset_download("fantacher/neu-metal-surface-defects-data"),
-        "NEU Metal Surface Defects Data"
-    )
-
-    test_dataset_raw  = datasets.ImageFolder(root=f"{path}/test", transform=None)
+def load_test_dataset(dataset_name, img_size):
+    test_dataset_raw  = datasets.ImageFolder(root=f"datasets/{dataset_name}/test", transform=None)
 
     albumentations_test_transform = A.Compose([
         A.Resize(img_size, img_size),
